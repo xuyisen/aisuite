@@ -1,8 +1,10 @@
-from typing import Callable, Dict, Any, Type, Optional, get_origin, get_args, Union
-from pydantic import BaseModel, create_model, Field, ValidationError
 import inspect
 import json
+from collections.abc import Callable
+from typing import Any, Union, get_args, get_origin
+
 from docstring_parser import parse
+from pydantic import BaseModel, Field, ValidationError, create_model
 
 
 class Tools:
@@ -13,7 +15,7 @@ class Tools:
                 self._add_tool(tool)
 
     # Add a tool function with or without a Pydantic model.
-    def _add_tool(self, func: Callable, param_model: Optional[Type[BaseModel]] = None):
+    def _add_tool(self, func: Callable, param_model: type[BaseModel] | None = None):
         """Register a tool function with metadata. If no param_model is provided, infer from function signature."""
         # Check if this is an MCP tool with original schema
         if hasattr(func, "__mcp_input_schema__") and func.__mcp_input_schema__:
@@ -39,7 +41,7 @@ class Tools:
             return self.__convert_to_openai_format()
         return [tool["spec"] for tool in self._tools.values()]
 
-    def _unwrap_optional(self, field_type: Type) -> tuple[Type, bool]:
+    def _unwrap_optional(self, field_type: type) -> tuple[type, bool]:
         """
         Unwrap Optional[T] to get the base type T.
 
@@ -60,8 +62,8 @@ class Tools:
 
     # Convert the function and its Pydantic model to a unified tool specification.
     def _convert_to_tool_spec(
-        self, func: Callable, param_model: Type[BaseModel]
-    ) -> Dict[str, Any]:
+        self, func: Callable, param_model: type[BaseModel]
+    ) -> dict[str, Any]:
         """Convert the function and its Pydantic model to a unified tool specification."""
         type_mapping = {str: "string", int: "integer", float: "number", bool: "boolean"}
 
@@ -131,7 +133,7 @@ class Tools:
 
         return param_descriptions
 
-    def _convert_mcp_schema_to_tool_spec(self, func: Callable) -> Dict[str, Any]:
+    def _convert_mcp_schema_to_tool_spec(self, func: Callable) -> dict[str, Any]:
         """
         Convert MCP tool with original inputSchema to tool spec.
 
@@ -149,12 +151,10 @@ class Tools:
         return {
             "name": func.__name__,
             "description": func.__doc__ or "",
-            "parameters": input_schema  # Use original schema directly!
+            "parameters": input_schema,  # Use original schema directly!
         }
 
-    def _create_pydantic_model_from_mcp_schema(
-        self, func: Callable
-    ) -> Type[BaseModel]:
+    def _create_pydantic_model_from_mcp_schema(self, func: Callable) -> type[BaseModel]:
         """
         Create a Pydantic model from MCP inputSchema for parameter validation.
 
@@ -192,7 +192,7 @@ class Tools:
 
     def __infer_from_signature(
         self, func: Callable
-    ) -> tuple[Dict[str, Any], Type[BaseModel]]:
+    ) -> tuple[dict[str, Any], type[BaseModel]]:
         """Infer parameters(required and optional) and requirements directly from the function signature."""
         signature = inspect.signature(func)
         fields = {}

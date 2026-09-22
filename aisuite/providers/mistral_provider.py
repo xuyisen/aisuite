@@ -1,11 +1,12 @@
 """Mistral provider for the aisuite."""
 
 import os
-from mistralai import Mistral
-from aisuite.framework import ChatCompletionResponse
-from aisuite.provider import Provider, LLMError
-from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
+from mistralai import Mistral
+
+from aisuite.framework import ChatCompletionResponse
+from aisuite.provider import LLMError, Provider
+from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 # Implementation of Mistral provider.
 # Mistral's message format is the same as OpenAI's. Just different class names,
