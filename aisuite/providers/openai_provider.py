@@ -8,6 +8,7 @@ from aisuite.framework.message import (
     Segment,
     Word,
     StreamingTranscriptionChunk,
+    TranscriptionOptions,
 )
 
 
@@ -51,6 +52,24 @@ class OpenaiProvider(Provider):
             raise LLMError(f"An error occurred: {e}")
 
 
+
+def _extract_options(kwargs):
+    """Extract TranscriptionOptions from kwargs and merge its fields."""
+    options = kwargs.pop("options", None)
+    if options is not None and isinstance(options, TranscriptionOptions):
+        # Map TranscriptionOptions fields to OpenAI API parameters
+        option_fields = {
+            "language": "language",
+            "prompt": "prompt",
+            "response_format": "response_format",
+            "temperature": "temperature",
+            "timestamp_granularities": "timestamp_granularities",
+        }
+        for opt_attr, kwarg_key in option_fields.items():
+            value = getattr(options, opt_attr, None)
+            if value is not None:
+                kwargs[kwarg_key] = value
+
 # Audio Classes
 class OpenAIAudio(Audio):
     """OpenAI Audio functionality container."""
@@ -78,6 +97,9 @@ class OpenAIAudio(Audio):
             This is a simple pass-through to the OpenAI API.
             """
             try:
+                # Extract options from kwargs if present
+                _extract_options(kwargs)
+
                 # Handle timestamp_granularities requirement
                 if "timestamp_granularities" in kwargs:
                     # OpenAI requires verbose_json format for timestamp_granularities
@@ -112,6 +134,9 @@ class OpenAIAudio(Audio):
             This is a simple pass-through to the OpenAI API with streaming enabled.
             """
             try:
+                # Extract options from kwargs if present
+                _extract_options(kwargs)
+
                 # Enable streaming
                 kwargs["stream"] = True
 

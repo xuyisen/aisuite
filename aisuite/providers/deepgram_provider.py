@@ -82,6 +82,37 @@ class DeepgramAudio(Audio):
             """
             try:
                 from deepgram import PrerecordedOptions
+                from aisuite.framework.message import TranscriptionOptions
+
+                # Handle TranscriptionOptions if provided
+                options = kwargs.pop("options", None)
+                if options is not None:
+                    if isinstance(options, TranscriptionOptions):
+                        # Map TranscriptionOptions fields to Deepgram parameter names
+                        options_mapping = {
+                            "language": "language",
+                            "encoding": "encoding",
+                            "enable_speaker_diarization": "diarize",
+                            "enable_automatic_punctuation": "punctuate",
+                            "enable_profanity_filter": "profanity_filter",
+                            "enable_smart_formatting": "smart_format",
+                            "enable_word_confidence": "word_confidence",
+                            "enable_sentiment_analysis": "sentiment",
+                            "enable_topic_detection": "topics",
+                            "enable_intent_recognition": "intents",
+                            "enable_summarization": "summary",
+                            "enable_translation": "translate",
+                            "max_alternatives": "alternatives",
+                            "interim_results": "interim_results",
+                            "vad_sensitivity": "vad_sensitivity",
+                            "include_confidence_scores": "alternatives",
+                        }
+                        from dataclasses import fields as dc_fields
+                        for field in dc_fields(TranscriptionOptions):
+                            if field.name in options_mapping:
+                                value = getattr(options, field.name, None)
+                                if value is not None:
+                                    kwargs[options_mapping[field.name]] = value
 
                 # Add model to params and set defaults
                 kwargs["model"] = model
