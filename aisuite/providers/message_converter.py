@@ -2,9 +2,9 @@
 
 from aisuite.framework import ChatCompletionResponse
 from aisuite.framework.message import (
-    Message,
     ChatCompletionMessageToolCall,
     CompletionUsage,
+    Message,
 )
 
 

@@ -1,8 +1,10 @@
 """Deepseek provider for the aisuite."""
 
 import os
+
 import openai
-from aisuite.provider import Provider, LLMError
+
+from aisuite.provider import LLMError, Provider
 from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 

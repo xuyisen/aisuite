@@ -1,15 +1,15 @@
 """AWS Bedrock provider for the aisuite."""
 
-import os
 import json
-from typing import List, Dict, Any, Tuple, Optional
+import os
+from typing import Any
 
 import boto3
 import botocore
 
-from aisuite.provider import Provider, LLMError
 from aisuite.framework import ChatCompletionResponse
-from aisuite.framework.message import Message, CompletionUsage
+from aisuite.framework.message import CompletionUsage, Message
+from aisuite.provider import LLMError, Provider
 
 
 # pylint: disable=too-few-public-methods
@@ -37,8 +37,8 @@ class BedrockMessageConverter:
 
     @staticmethod
     def convert_request(
-        messages: List[Dict[str, Any]],
-    ) -> Tuple[List[Dict], List[Dict]]:
+        messages: list[dict[str, Any]],
+    ) -> tuple[list[dict], list[dict]]:
         """Convert messages to AWS Bedrock format."""
         # Convert all messages to dicts if they're Message objects
         messages = [
@@ -78,8 +78,8 @@ class BedrockMessageConverter:
 
     @staticmethod
     def convert_response_tool_call(
-        response: Dict[str, Any],
-    ) -> Optional[Dict[str, Any]]:
+        response: dict[str, Any],
+    ) -> dict[str, Any] | None:
         """Convert AWS Bedrock tool call response to OpenAI format."""
         if response.get("stopReason") != "tool_use":
             return None
@@ -110,7 +110,7 @@ class BedrockMessageConverter:
         }
 
     @staticmethod
-    def convert_tool_result(message: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def convert_tool_result(message: dict[str, Any]) -> dict[str, Any] | None:
         """Convert OpenAI tool result format to AWS Bedrock format."""
         if message["role"] != "tool" or "content" not in message:
             return None
@@ -133,7 +133,7 @@ class BedrockMessageConverter:
         }
 
     @staticmethod
-    def convert_assistant(message: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def convert_assistant(message: dict[str, Any]) -> dict[str, Any] | None:
         """Convert OpenAI assistant format to AWS Bedrock format."""
         if message["role"] != "assistant":
             return None
@@ -164,7 +164,7 @@ class BedrockMessageConverter:
         return {"role": "assistant", "content": content} if content else None
 
     @staticmethod
-    def convert_response(response: Dict[str, Any]) -> ChatCompletionResponse:
+    def convert_response(response: dict[str, Any]) -> ChatCompletionResponse:
         """Normalize the response from the Bedrock API to match OpenAI's response format."""
         norm_response = ChatCompletionResponse()
 
@@ -217,11 +217,11 @@ class AwsProvider(Provider):
         self.client = self.config.create_client()
         self.transformer = BedrockMessageConverter()
 
-    def convert_response(self, response: Dict[str, Any]) -> ChatCompletionResponse:
+    def convert_response(self, response: dict[str, Any]) -> ChatCompletionResponse:
         """Normalize the response from the Bedrock API to match OpenAI's response format."""
         return self.transformer.convert_response(response)
 
-    def _convert_tool_spec(self, kwargs: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def _convert_tool_spec(self, kwargs: dict[str, Any]) -> dict[str, Any] | None:
         """Convert tool specifications to Bedrock format."""
         if "tools" not in kwargs:
             return None
@@ -240,7 +240,7 @@ class AwsProvider(Provider):
         }
         return tool_config
 
-    def _prepare_request_config(self, kwargs: Dict[str, Any]) -> Dict[str, Any]:
+    def _prepare_request_config(self, kwargs: dict[str, Any]) -> dict[str, Any]:
         """Prepare the configuration for the Bedrock API request."""
         # Convert tools and remove from kwargs
         tool_config = self._convert_tool_spec(kwargs)
@@ -269,7 +269,7 @@ class AwsProvider(Provider):
         return request_config
 
     def chat_completions_create(
-        self, model: str, messages: List[Dict[str, Any]], **kwargs
+        self, model: str, messages: list[dict[str, Any]], **kwargs
     ) -> ChatCompletionResponse:
         """Create a chat completion request to AWS Bedrock."""
         system_message, formatted_messages = self.transformer.convert_request(messages)

@@ -1,9 +1,11 @@
-import os
 import json
+import os
+
 from huggingface_hub import InferenceClient
-from aisuite.provider import Provider, LLMError
+
 from aisuite.framework import ChatCompletionResponse
 from aisuite.framework.message import Message
+from aisuite.provider import LLMError, Provider
 
 
 class HuggingfaceProvider(Provider):

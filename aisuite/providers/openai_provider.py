@@ -1,14 +1,17 @@
-import openai
 import os
-from typing import Union, BinaryIO, AsyncGenerator
-from aisuite.provider import Provider, LLMError, ASRError, Audio
-from aisuite.providers.message_converter import OpenAICompliantMessageConverter
+from collections.abc import AsyncGenerator
+from typing import BinaryIO
+
+import openai
+
 from aisuite.framework.message import (
-    TranscriptionResult,
     Segment,
-    Word,
     StreamingTranscriptionChunk,
+    TranscriptionResult,
+    Word,
 )
+from aisuite.provider import ASRError, Audio, LLMError, Provider
+from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 
 class OpenaiProvider(Provider):
@@ -68,7 +71,7 @@ class OpenAIAudio(Audio):
         def create(
             self,
             model: str,
-            file: Union[str, BinaryIO],
+            file: str | BinaryIO,
             **kwargs,
         ) -> TranscriptionResult:
             """
@@ -111,7 +114,7 @@ class OpenAIAudio(Audio):
         async def create_stream_output(
             self,
             model: str,
-            file: Union[str, BinaryIO],
+            file: str | BinaryIO,
             **kwargs,
         ) -> AsyncGenerator[StreamingTranscriptionChunk, None]:
             """

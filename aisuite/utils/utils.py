@@ -2,6 +2,7 @@
 
 import json
 from unittest.mock import MagicMock
+
 from pydantic import BaseModel
 
 

@@ -2,17 +2,19 @@
 # Links:
 # Tool calling docs - https://docs.anthropic.com/en/docs/build-with-claude/tool-use
 
-import anthropic
 import json
-from aisuite.provider import Provider
+
+import anthropic
+
 from aisuite.framework import ChatCompletionResponse
 from aisuite.framework.message import (
-    Message,
     ChatCompletionMessageToolCall,
-    Function,
     CompletionUsage,
+    Function,
+    Message,
     PromptTokensDetails,
 )
+from aisuite.provider import Provider
 
 # Define a constant for the default max_tokens value
 DEFAULT_MAX_TOKENS = 4096

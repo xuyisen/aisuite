@@ -1,9 +1,11 @@
-import os
-import cohere
 import json
+import os
+
+import cohere
+
 from aisuite.framework import ChatCompletionResponse
-from aisuite.framework.message import Message, ChatCompletionMessageToolCall, Function
-from aisuite.provider import Provider, LLMError
+from aisuite.framework.message import ChatCompletionMessageToolCall, Function, Message
+from aisuite.provider import LLMError, Provider
 
 
 class CohereMessageConverter:

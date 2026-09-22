@@ -1,6 +1,8 @@
 import os
+
 import groq
-from aisuite.provider import Provider, LLMError
+
+from aisuite.provider import LLMError, Provider
 from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 # Implementation of Groq provider.
@@ -24,8 +26,6 @@ class GroqMessageConverter(OpenAICompliantMessageConverter):
     """
     Groq-specific message converter if needed
     """
-
-    pass
 
 
 class GroqProvider(Provider):

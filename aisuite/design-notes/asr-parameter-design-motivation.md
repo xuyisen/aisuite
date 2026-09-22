@@ -28,7 +28,7 @@ result = client.audio.transcriptions.create(
     model="openai:whisper-1",
     file="meeting.mp3",
     language="en",
-    prompt="discussion about API design"
+    prompt="discussion about API design",
 )
 
 # Exact same code works with Deepgram
@@ -36,7 +36,7 @@ result = client.audio.transcriptions.create(
     model="deepgram:nova-2",
     file="meeting.mp3",
     language="en",
-    prompt="discussion about API design"
+    prompt="discussion about API design",
 )
 ```
 
@@ -59,10 +59,10 @@ result = client.audio.transcriptions.create(
     model="deepgram:nova-2",
     file="meeting.mp3",
     language="en",
-    punctuate=True,        # Deepgram-specific
-    diarize=True,          # Deepgram-specific
-    sentiment=True,        # Deepgram-specific
-    smart_format=True      # Deepgram-specific
+    punctuate=True,  # Deepgram-specific
+    diarize=True,  # Deepgram-specific
+    sentiment=True,  # Deepgram-specific
+    smart_format=True,  # Deepgram-specific
 )
 ```
 
@@ -73,8 +73,8 @@ result = client.audio.transcriptions.create(
     file="meeting.mp3",
     language_code="en-US",
     enable_automatic_punctuation=True,  # Google-specific
-    max_alternatives=3,                  # Google-specific
-    speech_contexts=[{"phrases": ["API", "SDK", "REST"]}]  # Google-specific
+    max_alternatives=3,  # Google-specific
+    speech_contexts=[{"phrases": ["API", "SDK", "REST"]}],  # Google-specific
 )
 ```
 

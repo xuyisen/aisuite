@@ -3,7 +3,7 @@ Parameter mapping utilities for ASR providers.
 Maps unified TranscriptionOptions to provider-specific parameters.
 """
 
-from typing import Dict, Any, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .message import TranscriptionOptions
@@ -72,7 +72,7 @@ class ParameterMapper:
     }
 
     @classmethod
-    def map_to_openai(cls, options: "TranscriptionOptions") -> Dict[str, Any]:
+    def map_to_openai(cls, options: "TranscriptionOptions") -> dict[str, Any]:
         """Map TranscriptionOptions to OpenAI Whisper API parameters."""
         params = {}
 
@@ -98,7 +98,7 @@ class ParameterMapper:
         return params
 
     @classmethod
-    def map_to_deepgram(cls, options: "TranscriptionOptions") -> Dict[str, Any]:
+    def map_to_deepgram(cls, options: "TranscriptionOptions") -> dict[str, Any]:
         """Map TranscriptionOptions to Deepgram API parameters."""
         params = {}
 
@@ -128,7 +128,7 @@ class ParameterMapper:
         return params
 
     @classmethod
-    def map_to_google(cls, options: "TranscriptionOptions") -> Dict[str, Any]:
+    def map_to_google(cls, options: "TranscriptionOptions") -> dict[str, Any]:
         """Map TranscriptionOptions to Google Speech-to-Text API parameters."""
         params = {}
 
@@ -201,7 +201,7 @@ class ParameterMapper:
 
     @classmethod
     def _apply_custom_parameters(
-        cls, params: Dict[str, Any], custom_params: Dict[str, Any], provider: str
+        cls, params: dict[str, Any], custom_params: dict[str, Any], provider: str
     ):
         """
         Apply custom parameters for the specific provider.

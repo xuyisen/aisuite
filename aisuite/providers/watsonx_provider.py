@@ -1,8 +1,10 @@
-from aisuite.provider import Provider
 import os
+
 from ibm_watsonx_ai import Credentials
 from ibm_watsonx_ai.foundation_models import ModelInference
+
 from aisuite.framework import ChatCompletionResponse
+from aisuite.provider import Provider
 
 
 class WatsonxProvider(Provider):
@@ -12,7 +14,7 @@ class WatsonxProvider(Provider):
         self.project_id = config.get("project_id") or os.getenv("WATSONX_PROJECT_ID")
 
         if not self.service_url or not self.api_key or not self.project_id:
-            raise EnvironmentError(
+            raise OSError(
                 "Missing one or more required WatsonX environment variables: "
                 "WATSONX_SERVICE_URL, WATSONX_API_KEY, WATSONX_PROJECT_ID. "
                 "Please refer to the setup guide: /guides/watsonx.md."

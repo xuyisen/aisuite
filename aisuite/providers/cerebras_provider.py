@@ -1,7 +1,8 @@
 """Cerebras provider for the aisuite."""
 
 import cerebras.cloud.sdk as cerebras
-from aisuite.provider import Provider, LLMError
+
+from aisuite.provider import LLMError, Provider
 from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 

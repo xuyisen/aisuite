@@ -1,8 +1,10 @@
-from typing import Callable, Dict, Any, Type, Optional
-from pydantic import BaseModel, create_model, Field, ValidationError
 import inspect
 import json
+from collections.abc import Callable
+from typing import Any
+
 from docstring_parser import parse
+from pydantic import BaseModel, Field, ValidationError, create_model
 
 
 class Tools:
@@ -13,7 +15,7 @@ class Tools:
                 self._add_tool(tool)
 
     # Add a tool function with or without a Pydantic model.
-    def _add_tool(self, func: Callable, param_model: Optional[Type[BaseModel]] = None):
+    def _add_tool(self, func: Callable, param_model: type[BaseModel] | None = None):
         """Register a tool function with metadata. If no param_model is provided, infer from function signature."""
         if param_model:
             tool_spec = self._convert_to_tool_spec(func, param_model)
@@ -35,8 +37,8 @@ class Tools:
 
     # Convert the function and its Pydantic model to a unified tool specification.
     def _convert_to_tool_spec(
-        self, func: Callable, param_model: Type[BaseModel]
-    ) -> Dict[str, Any]:
+        self, func: Callable, param_model: type[BaseModel]
+    ) -> dict[str, Any]:
         """Convert the function and its Pydantic model to a unified tool specification."""
         type_mapping = {str: "string", int: "integer", float: "number", bool: "boolean"}
 
@@ -105,7 +107,7 @@ class Tools:
 
     def __infer_from_signature(
         self, func: Callable
-    ) -> tuple[Dict[str, Any], Type[BaseModel]]:
+    ) -> tuple[dict[str, Any], type[BaseModel]]:
         """Infer parameters(required and optional) and requirements directly from the function signature."""
         signature = inspect.signature(func)
         fields = {}

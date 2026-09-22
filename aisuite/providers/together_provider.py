@@ -1,6 +1,8 @@
 import os
+
 import httpx
-from aisuite.provider import Provider, LLMError
+
+from aisuite.provider import LLMError, Provider
 from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 
@@ -8,8 +10,6 @@ class TogetherMessageConverter(OpenAICompliantMessageConverter):
     """
     Together-specific message converter if needed
     """
-
-    pass
 
 
 class TogetherProvider(Provider):

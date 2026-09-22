@@ -1,9 +1,8 @@
+import functools
+import importlib
 from abc import ABC, abstractmethod
 from pathlib import Path
-import importlib
-import os
-import functools
-from typing import Union, BinaryIO, Optional
+from typing import BinaryIO
 
 
 class LLMError(Exception):
@@ -23,12 +22,11 @@ class ASRError(Exception):
 class Provider(ABC):
     def __init__(self):
         """Initialize provider with optional audio functionality."""
-        self.audio: Optional[Audio] = None
+        self.audio: Audio | None = None
 
     @abstractmethod
     def chat_completions_create(self, model, messages):
         """Abstract method for chat completion calls, to be implemented by each provider."""
-        pass
 
 
 class ProviderFactory:
@@ -50,7 +48,7 @@ class ProviderFactory:
             module = importlib.import_module(module_path)
         except ImportError as e:
             raise ImportError(
-                f"Could not import module {module_path}: {str(e)}. Please ensure the provider is supported by doing ProviderFactory.get_supported_providers()"
+                f"Could not import module {module_path}: {e!s}. Please ensure the provider is supported by doing ProviderFactory.get_supported_providers()"
             )
 
         # Instantiate the provider class
@@ -69,7 +67,7 @@ class Audio:
     """Base class for all audio functionality."""
 
     def __init__(self):
-        self.transcriptions: Optional["Audio.Transcription"] = None
+        self.transcriptions: Audio.Transcription | None = None
 
     class Transcription(ABC):
         """Base class for audio transcription functionality."""
@@ -77,7 +75,7 @@ class Audio:
         def create(
             self,
             model: str,
-            file: Union[str, BinaryIO],
+            file: str | BinaryIO,
             options=None,
             **kwargs,
         ):
@@ -87,7 +85,7 @@ class Audio:
         async def create_stream_output(
             self,
             model: str,
-            file: Union[str, BinaryIO],
+            file: str | BinaryIO,
             options=None,
             **kwargs,
         ):

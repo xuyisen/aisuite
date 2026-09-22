@@ -1,7 +1,9 @@
 import os
+
 import httpx
-from aisuite.provider import Provider, LLMError
+
 from aisuite.framework import ChatCompletionResponse
+from aisuite.provider import LLMError, Provider
 
 
 class LmstudioProvider(Provider):

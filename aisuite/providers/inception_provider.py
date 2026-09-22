@@ -1,6 +1,8 @@
-import openai
 import os
-from aisuite.provider import Provider, LLMError
+
+import openai
+
+from aisuite.provider import LLMError, Provider
 
 
 class InceptionProvider(Provider):

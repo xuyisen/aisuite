@@ -1,7 +1,5 @@
 """Defines the ChatCompletionResponse class."""
 
-from typing import Optional
-
 from aisuite.framework.choice import Choice
 from aisuite.framework.message import CompletionUsage
 
@@ -13,4 +11,4 @@ class ChatCompletionResponse:
     def __init__(self):
         """Initializes the ChatCompletionResponse."""
         self.choices = [Choice()]  # Adjust the range as needed for more choices
-        self.usage: Optional[CompletionUsage] = None
+        self.usage: CompletionUsage | None = None

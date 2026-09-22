@@ -1,6 +1,8 @@
 import os
-from aisuite.provider import Provider, LLMError
+
 from openai import OpenAI
+
+from aisuite.provider import LLMError, Provider
 from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 
@@ -8,8 +10,6 @@ class SambanovaMessageConverter(OpenAICompliantMessageConverter):
     """
     SambaNova-specific message converter.
     """
-
-    pass
 
 
 class SambanovaProvider(Provider):

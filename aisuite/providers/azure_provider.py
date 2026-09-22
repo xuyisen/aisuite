@@ -1,10 +1,10 @@
-import urllib.request
 import json
 import os
+import urllib.request
 
-from aisuite.provider import Provider
 from aisuite.framework import ChatCompletionResponse
-from aisuite.framework.message import Message, ChatCompletionMessageToolCall, Function
+from aisuite.framework.message import ChatCompletionMessageToolCall, Message
+from aisuite.provider import Provider
 
 # Azure provider is based on the documentation here -
 # https://learn.microsoft.com/en-us/azure/machine-learning/reference-model-inference-api?view=azureml-api-2&source=recommendations&tabs=python

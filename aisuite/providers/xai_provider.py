@@ -1,7 +1,8 @@
 import os
+
 import httpx
-from aisuite.provider import Provider, LLMError
-from aisuite.framework import ChatCompletionResponse
+
+from aisuite.provider import LLMError, Provider
 from aisuite.providers.message_converter import OpenAICompliantMessageConverter
 
 
@@ -9,8 +10,6 @@ class XaiMessageConverter(OpenAICompliantMessageConverter):
     """
     xAI-specific message converter if needed
     """
-
-    pass
 
 
 class XaiProvider(Provider):

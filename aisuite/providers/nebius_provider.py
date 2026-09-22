@@ -1,7 +1,8 @@
 import os
-from aisuite.provider import Provider
+
 from openai import Client
 
+from aisuite.provider import Provider
 
 BASE_URL = "https://api.studio.nebius.ai/v1"
 
@@ -28,5 +29,5 @@ class NebiusProvider(Provider):
         return self.client.chat.completions.create(
             model=model,
             messages=messages,
-            **kwargs  # Pass any additional arguments to the Nebius API
+            **kwargs,  # Pass any additional arguments to the Nebius API
         )

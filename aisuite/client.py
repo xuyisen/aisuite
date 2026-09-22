@@ -1,11 +1,11 @@
-from .provider import ProviderFactory
-import os
-from .utils.tools import Tools
-from typing import Union, BinaryIO, Optional, Any, Literal
+from typing import Any, BinaryIO, Literal
+
+from .framework.asr_params import ParamValidator
 from .framework.message import (
     TranscriptionResponse,
 )
-from .framework.asr_params import ParamValidator
+from .provider import ProviderFactory
+from .utils.tools import Tools
 
 
 class Client:
@@ -65,7 +65,7 @@ class Client:
 
         return provider_key
 
-    def configure(self, provider_configs: Optional[dict] = None):
+    def configure(self, provider_configs: dict | None = None):
         """
         Configure the client with provider configurations.
         """
@@ -291,7 +291,7 @@ class Transcriptions:
         self,
         *,
         model: str,
-        file: Union[str, BinaryIO],
+        file: str | BinaryIO,
         **kwargs,
     ) -> TranscriptionResponse:
         """
