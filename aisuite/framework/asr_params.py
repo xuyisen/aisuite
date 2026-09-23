@@ -8,15 +8,15 @@ across different providers. It supports:
 - Three validation modes: strict, warn, and permissive
 """
 
-from typing import Dict, Set, Any, Optional, Literal
 import logging
+from typing import Any, Literal
 
 logger = logging.getLogger(__name__)
 
 
 # Common parameters that get auto-mapped across providers
 # These follow OpenAI's API conventions for maximum portability
-COMMON_PARAMS: Dict[str, Dict[str, Optional[str]]] = {
+COMMON_PARAMS: dict[str, dict[str, str | None]] = {
     "language": {
         "openai": "language",
         "deepgram": "language",
@@ -37,7 +37,7 @@ COMMON_PARAMS: Dict[str, Dict[str, Optional[str]]] = {
 
 # Valid provider-specific parameters
 # Each provider has its own set of supported parameters
-PROVIDER_PARAMS: Dict[str, Set[str]] = {
+PROVIDER_PARAMS: dict[str, set[str]] = {
     "openai": {
         # Basic parameters
         "language",
@@ -161,8 +161,8 @@ class ParamValidator:
         self.extra_param_mode = extra_param_mode
 
     def validate_and_map(
-        self, provider_key: str, params: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, provider_key: str, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Validate and map parameters for the given provider.
 
@@ -220,9 +220,7 @@ class ParamValidator:
 
         return result
 
-    def _transform_value(
-        self, provider_key: str, param_key: str, value: Any
-    ) -> Any:
+    def _transform_value(self, provider_key: str, param_key: str, value: Any) -> Any:
         """
         Transform parameter values during mapping.
 
@@ -240,9 +238,13 @@ class ParamValidator:
             Transformed parameter value
         """
         # Google: Expand 2-letter language codes to locale codes
-        if provider_key == "google" and param_key == "language":
-            if isinstance(value, str) and len(value) == 2:
-                return GOOGLE_LANGUAGE_MAP.get(value, f"{value}-US")
+        if (
+            provider_key == "google"
+            and param_key == "language"
+            and isinstance(value, str)
+            and len(value) == 2
+        ):
+            return GOOGLE_LANGUAGE_MAP.get(value, f"{value}-US")
 
         # Google: Wrap prompt in speech_contexts structure
         if provider_key == "google" and param_key == "prompt":
