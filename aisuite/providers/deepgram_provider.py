@@ -89,6 +89,28 @@ class DeepgramAudio(Audio):
                 kwargs.setdefault("punctuate", True)
                 kwargs.setdefault("language", "en")
 
+                # Remove framework-level 'options' parameter if present
+                # (TranscriptionOptions is not a Deepgram SDK parameter)
+                options = kwargs.pop("options", None)
+                if options is not None:
+                    # Map TranscriptionOptions fields to Deepgram parameters
+                    if hasattr(options, "enable_speaker_diarization") and options.enable_speaker_diarization:
+                        kwargs.setdefault("diarize", True)
+                    if hasattr(options, "enable_profanity_filter") and options.enable_profanity_filter:
+                        kwargs.setdefault("profanity_filter", True)
+                    if hasattr(options, "enable_word_confidence") and options.enable_word_confidence:
+                        kwargs.setdefault("word_confidence", True)
+                    if hasattr(options, "include_word_timestamps") and options.include_word_timestamps:
+                        kwargs.setdefault("word_timestamps", True)
+                    if hasattr(options, "max_speakers") and options.max_speakers:
+                        kwargs.setdefault("speaker_count", options.max_speakers)
+                    if hasattr(options, "min_speakers") and options.min_speakers:
+                        kwargs.setdefault("speaker_count", options.min_speakers)
+                    if hasattr(options, "context_phrases") and options.context_phrases:
+                        kwargs.setdefault("keywords", options.context_phrases)
+                    if hasattr(options, "boost_phrases") and options.boost_phrases:
+                        kwargs.setdefault("keywords", options.boost_phrases)
+
                 deepgram_options = PrerecordedOptions(**kwargs)
                 payload = self._prepare_audio_payload(file)
 

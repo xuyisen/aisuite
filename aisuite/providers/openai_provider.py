@@ -78,6 +78,14 @@ class OpenAIAudio(Audio):
             This is a simple pass-through to the OpenAI API.
             """
             try:
+                # Extract options from kwargs if present and merge into kwargs
+                options = kwargs.pop("options", None)
+                if options is not None:
+                    # Get set parameters from options and merge into kwargs
+                    for opt_key, opt_value in options.get_set_parameters().items():
+                        if opt_key not in kwargs:
+                            kwargs[opt_key] = opt_value
+
                 # Handle timestamp_granularities requirement
                 if "timestamp_granularities" in kwargs:
                     # OpenAI requires verbose_json format for timestamp_granularities
